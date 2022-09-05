@@ -74,7 +74,7 @@ df <- data.frame(
   ),
   methods = c(
     "-",
-    "BSc Thesis - Immobilized Metal Affinity Chromatography | Size Exclusion Chromatography | SDS-PAGE | Circular Dichroism Spectroscopy | Thermal Shift Assay | Enzyme-Linked Immunosorbent Assay | Enzymatic Assay",
+    "BSc Thesis - Immobilized Metal Affinity Chromatography | Size Exclusion Chromatography | SDS-PAGE |\n Circular Dichroism Spectroscopy | Thermal Shift Assay | Enzyme-Linked Immunosorbent Assay | Enzymatic Assay",
     "Flow Cytometry | Cell Titer Blue (CTB) assay | Lactate dehydrogenase activity assay",
     "Cell culture | Fluorescence Microscopy | CytoTox- Glo Assay",
     "snRNA-seq | R | Data Science & Analysis",
@@ -173,138 +173,37 @@ fig <- ggplot(data = df, aes(
   )
 )) +
   # create new x axis labels
-  geom_text(
-    mapping = aes(x = role, y = -20, label = my.labels),
-    size = 3,
-    color = "white"
-  ) +
+  geom_text(mapping = aes(x = role, y = -20, label = my.labels), size = 3, color = "white") +
   # bioinfo bars
-  geom_col(
-    mapping = aes(y = bioinfo),
-    fill = pal_bioinfo,
-    width = 0.5
-  ) +
-  geom_text(
-    mapping = aes(y = 5, label = bioinfo),
-    color = pal_bg,
-    size = 3
-  ) +
+  geom_col(mapping = aes(y = bioinfo), fill = pal_bioinfo, width = 0.5) +
+  geom_text(mapping = aes(y = 5, label = bioinfo), color = pal_bg, size = 3) +
   # fun dots
-  geom_line(
-    mapping = aes(x = role, y = fun),
-    color = pal_fun,
-    size = 0.5,
-    group = 1
-  ) +
-  geom_point(
-    mapping = aes(y = fun),
-    shape = 21,
-    fill = pal_bg,
-    color = pal_fun,
-    size = 7
-  ) +
-  geom_text(
-    mapping = aes(y = fun, label = fun),
-    color = pal_fun,
-    size = 3
-  ) +
+  geom_line(mapping = aes(x = role, y = fun), color = pal_fun, size = 0.5, group = 1) +
+  geom_point(mapping = aes(y = fun), shape = 21, fill = pal_bg, color = pal_fun, size = 7) +
+  geom_text(mapping = aes(y = fun, label = fun), color = pal_fun, size = 3) +
   # adjust scales to allow for pictures and segments
-  scale_y_continuous(
-    limits = c(-90, 119),
-    breaks = seq(from = 0, to = 100, by = 20)
-  ) +
+  scale_y_continuous(limits = c(-90, 119), breaks = seq(from = 0, to = 100, by = 20)) +
   # custom legend
-  geom_segment(aes(
-    x = 1,
-    xend = 1.5,
-    y = 110,
-    yend = 110
-  ),
-  color = pal_bioinfo,
-  size = 1.2
-  ) +
-  geom_segment(aes(
-    x = 1,
-    xend = 1.5,
-    y = 100,
-    yend = 100
-  ),
-  color = pal_fun,
-  size = 0.25
-  ) +
-  geom_point(
-    mapping = aes(x = 1.25, y = 100),
-    shape = 21,
-    color = pal_fun,
-    fill = pal_bg,
-    size = 4
-  ) +
-  annotate(
-    geom = "text",
-    y = 110,
-    x = 2.2,
-    label = "% Bioinformatics",
-    color = pal_bioinfo
-  ) +
-  annotate(
-    geom = "text",
-    y = 100,
-    x = 2.1,
-    label = "% Excitement",
-    color = pal_fun
-  ) +
+  geom_segment(mapping = aes(x = 1, xend = 1.5, y = 110, yend = 110), 
+               color = pal_bioinfo, size = 1.2) +
+  geom_segment(mapping = aes(x = 1, xend = 1.5, y = 100, yend = 100), 
+               color = pal_fun, size = 0.25) +
+  geom_point(mapping = aes(x = 1.25, y = 100), shape = 21, color = pal_fun, fill = pal_bg, size = 4) +
+  annotate(geom = "text", y = 110, x = 2.2, label = "% Bioinformatics", color = pal_bioinfo) +
+  annotate(geom = "text", y = 100, x = 2.1, label = "% Excitement", color = pal_fun) +
   # x axis groupings
-  geom_segment(
-    mapping = aes(
-      x = groupings_df$start_seg,
-      xend = groupings_df$end_seg,
-      y = -40,
-      yend = -40
-    ),
-    color = pal_bioinfo,
-    size = 0.3
-  ) +
-  geom_segment(
-    mapping = aes(
-      x = groupings_df$start_seg,
-      xend = groupings_df$start_seg,
-      y = -40,
-      yend = -35
-    ),
-    color = pal_bioinfo,
-    size = 0.3
-  ) +
-  geom_segment(
-    mapping = aes(
-      x = groupings_df$end_seg,
-      xend = groupings_df$end_seg,
-      y = -40,
-      yend = -35
-    ),
-    color = pal_bioinfo,
-    size = 0.3
-  ) +
+  geom_segment(mapping = aes(x = groupings_df$start_seg, xend = groupings_df$end_seg, y = -40, yend = -40),
+               color = pal_bioinfo, size = 0.3) +
+  geom_segment(mapping = aes(x = groupings_df$start_seg, xend = groupings_df$start_seg, y = -40, yend = -35),
+               color = pal_bioinfo, size = 0.3) +
+  geom_segment(mapping = aes(x = groupings_df$end_seg, xend = groupings_df$end_seg, y = -40, yend = -35),
+               color = pal_bioinfo, size = 0.3) +
   # segments to connect images to groupings
-  geom_segment(
-    mapping = aes(
-      x = groupings_df$half,
-      xend = groupings_df$half,
-      y = -40,
-      yend = -50
-    ),
-    color = pal_bioinfo,
-    size = 0.3
-  ) +
+  geom_segment(mapping = aes(x = groupings_df$half, xend = groupings_df$half, y = -40, yend = -50), 
+               color = pal_bioinfo, size = 0.3) +
   # grouping labels
-  geom_text(
-    mapping = aes(
-      x = groupings_df$half,
-      y = -90,
-      label = grouping_labels
-    ),
-    size = 3,
-    color = pal_bioinfo
-  ) +
+  geom_text(mapping = aes(x = groupings_df$half, y = -90, label = grouping_labels),
+            size = 3, color = pal_bioinfo) +
   scale_color_identity() +
   labs(title = title, x = "", y = "") +
   theme(
@@ -319,17 +218,6 @@ fig <- ggplot(data = df, aes(
     axis.ticks.x = element_blank(),
     axis.text.x = element_blank()
   )
-
-# add images
-#for (i in 1:nrow(images)) {
-# fig <- fig + annotation_raster(
-#    readPNG(images$path[i]),
-#    xmin = images$pos[i] - 0.2,
-#    xmax = images$pos[i] + 0.2,
-#    ymin = -80,
-#    ymax = -53
-#  )
-#}
 
 # add images
 ig = lapply(1:nrow(images),
