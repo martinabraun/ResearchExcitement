@@ -188,18 +188,31 @@ fig <- ggplot(data = df, aes(
                color = pal_bioinfo, size = 1.2) +
   geom_segment(mapping = aes(x = 1, xend = 1.5, y = 100, yend = 100), 
                color = pal_fun, size = 0.25) +
-  geom_point(mapping = aes(x = 1.25, y = 100), shape = 21, color = pal_fun, fill = pal_bg, size = 4) +
+  geom_point(mapping = aes(x = 1.25, y = 100),  
+             shape = 21, color = pal_fun, fill = pal_bg, size = 4) +
   annotate(geom = "text", y = 110, x = 2.2, label = "% Bioinformatics", color = pal_bioinfo) +
   annotate(geom = "text", y = 100, x = 2.1, label = "% Excitement", color = pal_fun) +
   # x axis groupings
-  geom_segment(mapping = aes(x = groupings_df$start_seg, xend = groupings_df$end_seg, y = -40, yend = -40),
+  geom_segment(mapping = aes(x = groupings_df$start_seg, 
+                             xend = groupings_df$end_seg, 
+                             y = -40, 
+                             yend = -40),
                color = pal_bioinfo, size = 0.3) +
-  geom_segment(mapping = aes(x = groupings_df$start_seg, xend = groupings_df$start_seg, y = -40, yend = -35),
+  geom_segment(mapping = aes(x = groupings_df$start_seg, 
+                             xend = groupings_df$start_seg, 
+                             y = -40, 
+                             yend = -35),
                color = pal_bioinfo, size = 0.3) +
-  geom_segment(mapping = aes(x = groupings_df$end_seg, xend = groupings_df$end_seg, y = -40, yend = -35),
+  geom_segment(mapping = aes(x = groupings_df$end_seg, 
+                             xend = groupings_df$end_seg, 
+                             y = -40, 
+                             yend = -35),
                color = pal_bioinfo, size = 0.3) +
   # segments to connect images to groupings
-  geom_segment(mapping = aes(x = groupings_df$half, xend = groupings_df$half, y = -40, yend = -50), 
+  geom_segment(mapping = aes(x = groupings_df$half, 
+                             xend = groupings_df$half, 
+                             y = -40, 
+                             yend = -50), 
                color = pal_bioinfo, size = 0.3) +
   # grouping labels
   geom_text(mapping = aes(x = groupings_df$half, y = -90, label = grouping_labels),
