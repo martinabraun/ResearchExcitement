@@ -17,11 +17,6 @@ output:
 }
 </style>
 
-# Introduction 
-I am a final year student in the master's program Molecular Bioscience and am working on my master's thesis. Finishing my degree soon also means I am looking for PhD positions. Applying for PhDs naturally confronted me with the question of which research direction I wish to pursue. Additionally, I recently started to focus on bioinformatics and single-cell omics. Therefore, I decided to explore the potential impact of bioinformatics on my excitement for research.  
-
-Side note: Having to write applications on a Sunday in the middle of summer can become so tedious, it leads to sudden bursts of creativity. In this case, the outcome of my application procrastination is a ggplotified interactive version of my CV. I hope you enjoy this little weekend project.
-
 # Methods 
 I wanted to explore the connection between my experienced excitement for research and the proportion of bioinformatics across my academic career. Thus, I decided to list my University degrees and research internships in chronological order (industry internships and jobs excluded). I obtained corresponding information, like the start and end dates, such as the duration, used methods and arbitrary additional information from my written CV (Yes, I had already gotten so far in the application writing process). The percentage of bioinformatics relates to the proportion of tasks and time I dedicated to bioinformatics at the indicated point in my career. It is essential to mention that the measured excitement level is fully based on my personal subjective experience. 
 

@@ -1,11 +1,11 @@
 name: "ResearchExcitement"
 output_dir: ../docs
 navbar:
-  title: "ResearchExcitement"
+  title: "Research Excitement and Bioinformatics"
   left:
-  - text: Home
+  - text: Introduction
     href: index.html
-  - text: Research Excitement and Bioinformatics
+  - text: Methods, Results & Discussion
     href: ResearchExcitement.html
 output:
   workflowr::wflow_html:
@@ -13,3 +13,5 @@ output:
     toc_float: yes
     theme: cosmo
     highlight: textmate
+    fig_width: 8
+    fig_height: 5
