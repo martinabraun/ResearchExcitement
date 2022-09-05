@@ -1,12 +1,16 @@
-name: "ResearchExcitement"
+name: ResearchExcitement
 output_dir: ../docs
 navbar:
-  title: "Research Excitement and Bioinformatics"
+  title: Research Excitement and Bioinformatics
   left:
   - text: Introduction
     href: index.html
   - text: Methods, Results & Discussion
     href: ResearchExcitement.html
+  right:
+  - icon: fab fa-github
+    text: Source code
+    href: https://github.com/martinabraun/ResearchExcitement
 output:
   workflowr::wflow_html:
     toc: yes
