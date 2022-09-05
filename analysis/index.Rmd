@@ -14,7 +14,7 @@ editor_options:
 }
 </style>
 
-I am a final year student in the master's program Molecular Bioscience and am working on my master's thesis. Finishing my degree soon also means I am looking for PhD positions. Applying for PhDs naturally confronted me with the question of which research direction I wish to pursue. Additionally, I recently started to focus on bioinformatics and single-cell omics. Therefore, I decided to explore the potential impact of bioinformatics on my excitement for research.  
+I am a final year student in the master's program Molecular Bioscience and am working on my master's thesis. Finishing my degree soon also means I am looking for PhD positions. Applying for PhDs naturally confronted me with the question of which research direction I wish to pursue. Additionally, I recently started to focus on bioinformatics and single-cell omics. I observed many fellow students transition from wet to dry lab. Thus, it has been hypothesized that bioinformatics is more engaging than traditional wet lab work. First results I obtained from internships, including wet lab work, dry lab work, or both, indicate that likewise bioinformatics might be more intriguing to me. Therefore, I decided to explore the potential impact of bioinformatics on my own excitement for research across my University degrees and internships.  
 
 Side note: Having to write applications on a Sunday in the middle of summer can become so tedious, it leads to sudden bursts of creativity. In this case, the outcome of my application procrastination is a ggplotified interactive version of my CV. I hope you enjoy this little weekend project.
 
