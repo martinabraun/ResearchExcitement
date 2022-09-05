@@ -5,10 +5,8 @@ navbar:
   left:
   - text: Home
     href: index.html
-  - text: About
-    href: about.html
-  - text: License
-    href: license.html
+  - text: Research Excitement and Bioinformatics
+    href: ResearchExcitement.html
 output:
   workflowr::wflow_html:
     toc: yes
