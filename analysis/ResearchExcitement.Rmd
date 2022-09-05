@@ -1,0 +1,374 @@
+---
+title: "My Excitement for Research Increases with Bioinformatics"
+author: "Martina"
+date: '2022-09-03'
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+    theme: lumen
+    highlight: textmate
+    fig_width: 8
+    fig_height: 5
+---
+<style type="text/css">
+  body{
+  font-size: 14pt;
+}
+</style>
+
+# Introduction 
+I am a final year student in the master's program Molecular Bioscience and am working on my master's thesis. Finishing my degree soon also means I am looking for PhD positions. Applying for PhDs naturally confronted me with the question of which research direction I wish to pursue. Additionally, I recently started to focus on bioinformatics and single-cell omics. Therefore, I decided to explore the potential impact of bioinformatics on my excitement for research.  
+
+Side note: Having to write applications on a Sunday in the middle of summer can become so tedious, it leads to sudden bursts of creativity. In this case, the outcome of my application procrastination is a ggplotified interactive version of my CV. I hope you enjoy this little weekend project.
+
+# Methods 
+I wanted to explore the connection between my experienced excitement for research and the proportion of bioinformatics across my academic career. Thus, I decided to list my University degrees and research internships in chronological order (industry internships and jobs excluded). I obtained corresponding information, like the start and end dates, such as the duration, used methods and arbitrary additional information from my written CV (Yes, I had already gotten so far in the application writing process). The percentage of bioinformatics relates to the proportion of tasks and time I dedicated to bioinformatics at the indicated point in my career. It is essential to mention that the measured excitement level is fully based on my personal subjective experience. 
+
+## Load Packages
+```{r setup, message=FALSE, warning=FALSE}
+library(tidyverse)
+library(stringr)
+library(ggtext)
+library(sysfonts)
+library(showtext)
+library(plotly)
+library(magick)
+```
+
+## Create Dataframe 
+```{r dataframe}
+# create main dataframe
+df <- data.frame(
+  role = c(
+    "BSc Business",
+    "BSc Molecular Biosciences",
+    "Internship Molecular Immunology",
+    "Internship Neurobiology",
+    "Internship Evolutionary Genomics",
+    "MSc Thesis Molceular Neurobiology"
+  ),
+  uni = c(
+    "University Cologne",
+    rep("University Salzburg", 2),
+    rep("University Heidelberg", 3)
+  ),
+  fun = c(30, 55, 40, 60, 85, 100),
+  bioinfo = c(1, 15, 1, 20, 90, 100),
+  start = c(
+    "Sep 2013",
+    "Sep 2017",
+    "Jun 2020",
+    "Feb 2021",
+    "Sep 2021",
+    "since Apr 2022"
+  ),
+  end = c(
+    "Mar 2017",
+    "Apr 2020",
+    "Aug 2020",
+    "Mar 2021",
+    "Jan 2022",
+    "now"
+  ),
+  duration = c(
+    "3.5 years",
+    "2.5 years",
+    "3 months",
+    "2 months",
+    "5 months",
+    "ongoing"
+  ),
+  methods = c(
+    "-",
+    "BSc Thesis - Immobilized Metal Affinity Chromatography | Size Exclusion Chromatography | SDS-PAGE | Circular Dichroism Spectroscopy | Thermal Shift Assay | Enzyme-Linked Immunosorbent Assay | Enzymatic Assay",
+    "Flow Cytometry | Cell Titer Blue (CTB) assay | Lactate dehydrogenase activity assay",
+    "Cell culture | Fluorescence Microscopy | CytoTox- Glo Assay",
+    "snRNA-seq | R | Data Science & Analysis",
+    "Python | R | Data Science & Analysis"
+  ),
+  comment = c(
+    "no biology, no informatics...",
+    "finally some biology!\n I taught myself R and Python.\nBSc Thesis - The identification of ColQ1 activator domain residues that facilitate collagen binding of the collagenase unit",
+    "The role of HDACi in the context of Acute Myeloid Leukemia",
+    "Acquired neuroprotection mediated by extrasynaptic NMDA receptors.\n I used R to analyze my results.",
+    "Analysis of snRNA-seq data of the hagfish telencephalon \n and the opossum cortex to gain insights into brain evolution.",
+    "Developing a bioinformatics tool\n for calculating differentially methylated regions in scBS-seq data\n and exploring multi-omics data to unravel the role of mCH in neurogenesis."
+  )
+) %>%
+  mutate(role = factor(role, levels = role))
+```
+
+## Choose Fonts and Colors
+make it look pretty!
+```{r fonts}
+# import fonts
+font_add_google("roboto", "roboto")
+font_add_google("open sans", "open sans")
+showtext_auto()
+
+# color palette for plot
+pal_fun <- "#FD7600"
+pal_bioinfo <- "#24C4C4"
+pal_bg <- "#030623"
+pal_annotate <- "#B6B6B6"
+```
+
+## Title, Labels, etc.
+```{r labels}
+# create custom title to use with ggtext::element_textbox_simple
+title <-
+  '<span style="color:#FD7600;">MY EXCITEMENT FOR RESEARCH<br></span><span style="color:white;">INCREASES WITH</span><span style="color:#24C4C4;font-weight: bold;"> BIOINFORMATICS</span>'
+
+# labels
+my.labels <- c(
+  "BSc\nBusiness",
+  "BSc\nMolecular\nBiosciences",
+  "Internship\nMolecular\nImmunology",
+  "Internship\nNeurobiology",
+  "Internship\nEvolutionary\nGenomics",
+  "MSc Thesis\nMolceular\nNeurobiology"
+)
+
+grouping_labels <-
+  c(
+    "University Cologne",
+    "University Salzburg",
+    "University Heidelberg",
+    rep(NA, 3)
+  )
+
+label_plotly <- list(
+  bgcolor = pal_bg,
+  bordercolor = pal_bioinfo
+)
+
+# data for groupings
+groupings_df <- tibble(
+  start_seg = c(1, 2, 4, NA, NA, NA),
+  end_seg = c(1, 3, 6, NA, NA, NA)
+)
+groupings_df$half <-
+  groupings_df$start_seg + (groupings_df$end_seg - groupings_df$start_seg) /
+    2
+
+# data for images and respective positions on x axis
+images <- data.frame(
+  name = c(unique(df$uni)),
+  pos = groupings_df$half[1:3],
+  pal_label = c(rep(pal_bioinfo, 3))
+) %>%
+  mutate(path = paste0("data/images/", str_replace_all(tolower(name), " ", "_"), ".png")) %>%
+  arrange(pos)
+```
+
+# Results
+## Final Plot
+```{r, message=FALSE, warning=FALSE}
+# plot
+fig <- ggplot(data = df, aes(
+  x = role,
+  y = bioinfo,
+  text = paste(
+    "date: ", start, " to ", end, "\n",
+    "duration: ", duration, "\n",
+    "\n",
+    "methods: ", methods, "\n",
+    "\n",
+    "comment: ", comment, "\n",
+    sep = ""
+  )
+)) +
+  # create new x axis labels
+  geom_text(
+    mapping = aes(x = role, y = -20, label = my.labels),
+    size = 3,
+    color = "white"
+  ) +
+  # bioinfo bars
+  geom_col(
+    mapping = aes(y = bioinfo),
+    fill = pal_bioinfo,
+    width = 0.5
+  ) +
+  geom_text(
+    mapping = aes(y = 5, label = bioinfo),
+    color = pal_bg,
+    size = 3
+  ) +
+  # fun dots
+  geom_line(
+    mapping = aes(x = role, y = fun),
+    color = pal_fun,
+    size = 0.5,
+    group = 1
+  ) +
+  geom_point(
+    mapping = aes(y = fun),
+    shape = 21,
+    fill = pal_bg,
+    color = pal_fun,
+    size = 7
+  ) +
+  geom_text(
+    mapping = aes(y = fun, label = fun),
+    color = pal_fun,
+    size = 3
+  ) +
+  # adjust scales to allow for pictures and segments
+  scale_y_continuous(
+    limits = c(-90, 119),
+    breaks = seq(from = 0, to = 100, by = 20)
+  ) +
+  # custom legend
+  geom_segment(aes(
+    x = 1,
+    xend = 1.5,
+    y = 110,
+    yend = 110
+  ),
+  color = pal_bioinfo,
+  size = 1.2
+  ) +
+  geom_segment(aes(
+    x = 1,
+    xend = 1.5,
+    y = 100,
+    yend = 100
+  ),
+  color = pal_fun,
+  size = 0.25
+  ) +
+  geom_point(
+    mapping = aes(x = 1.25, y = 100),
+    shape = 21,
+    color = pal_fun,
+    fill = pal_bg,
+    size = 4
+  ) +
+  annotate(
+    geom = "text",
+    y = 110,
+    x = 2.2,
+    label = "% Bioinformatics",
+    color = pal_bioinfo
+  ) +
+  annotate(
+    geom = "text",
+    y = 100,
+    x = 2.1,
+    label = "% Excitement",
+    color = pal_fun
+  ) +
+  # x axis groupings
+  geom_segment(
+    mapping = aes(
+      x = groupings_df$start_seg,
+      xend = groupings_df$end_seg,
+      y = -40,
+      yend = -40
+    ),
+    color = pal_bioinfo,
+    size = 0.3
+  ) +
+  geom_segment(
+    mapping = aes(
+      x = groupings_df$start_seg,
+      xend = groupings_df$start_seg,
+      y = -40,
+      yend = -35
+    ),
+    color = pal_bioinfo,
+    size = 0.3
+  ) +
+  geom_segment(
+    mapping = aes(
+      x = groupings_df$end_seg,
+      xend = groupings_df$end_seg,
+      y = -40,
+      yend = -35
+    ),
+    color = pal_bioinfo,
+    size = 0.3
+  ) +
+  # segments to connect images to groupings
+  geom_segment(
+    mapping = aes(
+      x = groupings_df$half,
+      xend = groupings_df$half,
+      y = -40,
+      yend = -50
+    ),
+    color = pal_bioinfo,
+    size = 0.3
+  ) +
+  # grouping labels
+  geom_text(
+    mapping = aes(
+      x = groupings_df$half,
+      y = -90,
+      label = grouping_labels
+    ),
+    size = 3,
+    color = pal_bioinfo
+  ) +
+  scale_color_identity() +
+  labs(title = title, x = "", y = "") +
+  theme(
+    panel.background = element_rect(fill = pal_bg, color = NA),
+    plot.background = element_rect(fill = pal_bg),
+    plot.title = element_textbox_simple(size = 17, halign = 0.5),
+    text = element_text(color = "white"),
+    plot.margin = margin(t = 30, l = 10, r = 10),
+    panel.grid = element_blank(),
+    axis.text.y = element_text(color = "white"),
+    axis.ticks.y = element_blank(),
+    axis.ticks.x = element_blank(),
+    axis.text.x = element_blank()
+  )
+
+# add images
+#for (i in 1:nrow(images)) {
+# fig <- fig + annotation_raster(
+#    readPNG(images$path[i]),
+#    xmin = images$pos[i] - 0.2,
+#    xmax = images$pos[i] + 0.2,
+#    ymin = -80,
+#    ymax = -53
+#  )
+#}
+
+# add images
+ig = lapply(1:nrow(images),
+            function(i){
+              # get and setup image
+              img = image_read(images$path[i]) %>% as.raster()
+              list(source = raster2uri(img),
+                   xref = "x", yref = "y",
+                   xanchor = "center", yanchor = "middle",
+                   x = images$pos[i],
+                   y = -68,
+                   sizex = 3, sizey = 30)
+            })
+
+# plotly
+ggplotly(fig, tooltip = "text") %>%
+  layout(images = ig) %>% 
+  style(hoverinfo = "skip", traces = 3:17) %>%
+  style(hoverlabel = label_plotly) %>%
+  config(displayModeBar = FALSE)
+```
+
+The plot clearly shows a positive trend between my experienced excitement for research and the amount of bioinformatics I utilized in academic positions. Additionally, working in Bioinformatics seems to maximize my excitement, as visible for the masters thesis project. 
+
+# Discussion
+Based on the collected information and the observed positive trend between my excitement and bioinformatics, I suggest it is highly recommendable for me to do a PhD in computational biology. An increased excitement for research during my PhD is not only desirable but might very likely boost my overall well-being and, thus, my productivity and efficiency. 
+Nevertheless, there are some points of critique to the study. Multiple variables and their influence on the excitement for research have not been explored. It would be of utmost relevance to look into the impact of the following predictors:  
+  
+  – number of scientific publications read  
+  – support by colleagues and supervisors   
+  – the quality of coffee in the lab   
+  – the amount of consumed cake and chocolate due to birthdays and other celebrations in the lab  
+  – quality and amount of jokes in the office  
+
+Future ggplots should definitely look into the listed variables to make an even savvier decision for my academic career based on my excitement for research. As much as I would love to keep plotting and exploring now, I, unfortunately, have to restart writing applications.
